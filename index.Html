@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summit Bank</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#4cbb17',secondary:'#000000'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #4cbb17;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            box-shadow: 0 0 15px rgba(76, 187, 23, 0.7);
+            transform: translateY(-2px);
+        }
+        
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .grid-button {
+            transition: all 0.3s ease;
+        }
+        
+        .grid-button:hover {
+            transform: translateY(-3px);
+        }
+        
+        .social-icon {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .slide-in-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .slide-in-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .hero-section {
+            background-color: #000000;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background-image: url('https://readdy.ai/api/search-image?query=modern%2520banking%2520concept%2520with%2520abstract%2520digital%2520elements%252C%2520green%2520and%2520black%2520color%2520scheme%252C%2520minimalist%2520design%252C%2520subtle%2520technology%2520elements%252C%2520clean%2520composition%252C%2520left%2520side%2520completely%2520black%2520for%2520text%2520placement%252C%2520right%2520side%2520with%2520abstract%2520financial%2520elements%252C%2520perfect%2520for%2520banking%2520website%2520hero%2520section&width=800&height=500&seq=hero1&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigation Bar -->
+    <nav class="bg-secondary text-white fixed w-full z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold font-['Pacifico']">Summit Bank</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="nav-link text-white hover:text-primary">Home</a>
+                <a href="about.html" class="nav-link text-white hover:text-primary">About</a>
+                <a href="contact.html" class="nav-link text-white hover:text-primary">Contact Us</a>
+                <a href="staff-login-mesh.html" class="nav-link text-white hover:text-primary">Staff Login</a>
+            </div>
+            <div class="md:hidden w-8 h-8 flex items-center justify-center">
+                <i class="ri-menu-line ri-lg text-white"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section min-h-screen flex items-center pt-16">
+        <div class="container mx-auto px-6 py-20 relative z-10 w-full">
+            <div class="w-full md:w-1/2 fade-in">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">Banking Made Simple, Secure, Fast</h1>
+                <p class="text-gray-300 text-lg mb-8 max-w-xl">Experience the future of banking with our innovative digital solutions. Manage your finances anytime, anywhere with just a few clicks.</p>
+                <button class="cta-button bg-primary text-white px-8 py-4 font-medium text-lg !rounded-button whitespace-nowrap">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Button Grid Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-secondary text-center mb-4">Main Services</h2>
+                <p class="text-gray-600 text-center max-w-2xl mx-auto">Access our core banking services designed to meet your everyday financial needs.</p>
+            </div>
+            
+            <!-- Main Pages Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 fade-in">
+                <a href="index.html" class="grid-button flex flex-col items-center p-8 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-16 h-16 flex items-center justify-center text-primary group-hover:text-white mb-4">
+                        <i class="ri-home-4-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary group-hover:text-white">Home</h3>
+                </a>
+                
+                <a href="about.html" class="grid-button flex flex-col items-center p-8 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-16 h-16 flex items-center justify-center text-primary group-hover:text-white mb-4">
+                        <i class="ri-information-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary group-hover:text-white">About</h3>
+                </a>
+                
+                <a href="contact.html" class="grid-button flex flex-col items-center p-8 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-16 h-16 flex items-center justify-center text-primary group-hover:text-white mb-4">
+                        <i class="ri-customer-service-2-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary group-hover:text-white">Contact Us</h3>
+                </a>
+                
+                <a href="staff-login.html" class="grid-button flex flex-col items-center p-8 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-16 h-16 flex items-center justify-center text-primary group-hover:text-white mb-4">
+                        <i class="ri-user-settings-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary group-hover:text-white">Staff Login</h3>
+                </a>
+            </div>
+            
+            <div class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-secondary text-center mb-4">Banking Solutions</h2>
+                <p class="text-gray-600 text-center max-w-2xl mx-auto">Explore our specialized banking products tailored to your specific financial goals.</p>
+            </div>
+            
+            <!-- Sub Pages Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 fade-in">
+                <a href="retail-banking.html" class="grid-button flex flex-col items-center p-6 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-12 h-12 flex items-center justify-center text-primary group-hover:text-white mb-3">
+                        <i class="ri-user-3-line ri-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-secondary group-hover:text-white text-center">Retail Banking</h3>
+                </a>
+                
+                <a href="#" class="grid-button flex flex-col items-center p-6 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-12 h-12 flex items-center justify-center text-primary group-hover:text-white mb-3">
+                        <i class="ri-building-2-line ri-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-secondary group-hover:text-white text-center">Corporate Banking</h3>
+                </a>
+                
+                <a href="#" class="grid-button flex flex-col items-center p-6 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-12 h-12 flex items-center justify-center text-primary group-hover:text-white mb-3">
+                        <i class="ri-global-line ri-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-secondary group-hover:text-white text-center">International Banking</h3>
+                </a>
+                
+                <a href="#" class="grid-button flex flex-col items-center p-6 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-12 h-12 flex items-center justify-center text-primary group-hover:text-white mb-3">
+                        <i class="ri-smartphone-line ri-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-secondary group-hover:text-white text-center">Apply Mobile Banking</h3>
+                </a>
+                
+                <a href="#" class="grid-button flex flex-col items-center p-6 border-2 border-primary rounded bg-white hover:bg-primary group transition-all duration-300 !rounded-button whitespace-nowrap">
+                    <div class="w-12 h-12 flex items-center justify-center text-primary group-hover:text-white mb-3">
+                        <i class="ri-service-line ri-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-secondary group-hover:text-white text-center">Services</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="mb-12 fade-in">
+                <h2 class="text-3xl font-bold text-secondary text-center mb-4">Why Choose Summit Bank</h2>
+                <p class="text-gray-600 text-center max-w-2xl mx-auto">We offer innovative banking solutions with a focus on security, convenience, and customer satisfaction.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-8 rounded-lg shadow-sm text-center slide-in-left">
+                    <div class="w-16 h-16 mx-auto flex items-center justify-center text-primary mb-4">
+                        <i class="ri-time-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary mb-3">24/7 Access</h3>
+                    <p class="text-gray-600">Bank on your schedule with round-the-clock access to your accounts through our secure online and mobile platforms.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-8 rounded-lg shadow-sm text-center fade-in" style="transition-delay: 0.2s;">
+                    <div class="w-16 h-16 mx-auto flex items-center justify-center text-primary mb-4">
+                        <i class="ri-shield-check-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary mb-3">Secure Transactions</h3>
+                    <p class="text-gray-600">Rest easy knowing your financial information is protected by state-of-the-art encryption and security protocols.</p>
+                </div>
+                
+                <div class="feature-card bg-white p-8 rounded-lg shadow-sm text-center slide-in-right">
+                    <div class="w-16 h-16 mx-auto flex items-center justify-center text-primary mb-4">
+                        <i class="ri-flashlight-line ri-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-secondary mb-3">Fast Payments</h3>
+                    <p class="text-gray-600">Send and receive money instantly with our quick transfer system, making financial management effortless.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-secondary">
+        <div class="container mx-auto px-6 text-center fade-in">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Experience Better Banking?</h2>
+            <p class="text-gray-300 max-w-2xl mx-auto mb-8">Join thousands of satisfied customers who have transformed their banking experience with Summit Bank.</p>
+           <a href="customer%20registration.html" class="cta-button bg-primary text-white px-8 py-4 font-medium text-lg !rounded-button whitespace-nowrap inline-block">Open an Account Today
+	   </a>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-secondary text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 font-['Pacifico']">Summit Bank</h3>
+                    <p class="text-gray-300 mb-6">Providing innovative banking solutions since 2010. Your trusted financial partner for a secure future.</p>
+                    <div class="flex space-x-4">
+                       <a href="https://wa.me/254704174415?text=Hello%2C%20I%20would%20like%20to%20open%20an%20account"class="social-icon text-primary 					hover:text-white" target="_blank">
+  		       		<div class="w-10 h-10 flex items-center justify-center">
+    		       		<i class="ri-whatsapp-fill ri-lg"></i>
+  		      	 	</div>
+		       		</a>
+                        <a href="https://x.com/meshackMus11623" 
+   				class="social-icon text-primary hover:text-white" target="_blank">
+				<div class="w-10 h-10 flex items-center justify-center">
+    				<i class="ri-twitter-x-fill ri-lg"></i>
+  				</div>
+				</a>
+
+                        <a href="https://www.instagram.com/t.o.p_boy_/?__pwa=1"class="social-icon text-primary hover:text-white" target="_blank">
+  				<div class="w-10 h-10 flex items-center justify-center">
+    				<i class="ri-instagram-fill ri-lg"></i>
+ 				</div>
+				</a>
+                                </div>
+               		</div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-primary transition-colors">Contact Us</a></li>
+                        <li><a href="staff-login-mesh.html" class="text-gray-300 hover:text-primary transition-colors">Staff Login</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Banking Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="retail-banking.html" class="text-gray-300 hover:text-primary transition- colors">Retail Banking</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Corporate Banking</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">International Banking</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Mobile Banking</a></li>
+                        <li><a href="services.html" class="text-gray-300 hover:text-primary transition-colors">Services</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Information</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center mr-2 mt-1">
+                                <i class="ri-map-pin-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-300">Nairobi, Kenya</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center mr-2 mt-1">
+                                <i class="ri-phone-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-300">+254 704 174 415</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center mr-2 mt-1">
+                                <i class="ri-mail-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-300">meshackmusembi042@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-400">© 2025 Summit Bank. All rights reserved.
+	<a href="privacy-policy.html" class="hover:text-primary">Privacy Policy</a>
+	<a href="terms-of-service.html" class="hover:text-primary">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script id="animation-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial animations
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const slideLeftElements = document.querySelectorAll('.slide-in-left');
+            const slideRightElements = document.querySelectorAll('.slide-in-right');
+            
+            // Activate initial elements that are in viewport
+            activateElementsInViewport(fadeElements);
+            activateElementsInViewport(slideLeftElements);
+            activateElementsInViewport(slideRightElements);
+            
+            // Scroll animations
+            window.addEventListener('scroll', function() {
+                activateElementsInViewport(fadeElements);
+                activateElementsInViewport(slideLeftElements);
+                activateElementsInViewport(slideRightElements);
+            });
+            
+            function activateElementsInViewport(elements) {
+                elements.forEach(element => {
+                    if (isElementInViewport(element)) {
+                        element.classList.add('active');
+                    }
+                });
+            }
+            
+            function isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85
+                );
+            }
+        });
+    </script>
+    
+    <script id="mobile-menu-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('.ri-menu-line');
+            if (menuButton) {
+                menuButton.addEventListener('click', function() {
+                    // Mobile menu functionality would go here
+                    alert('Mobile menu clicked');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login & Management Dashboard | Banking System</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#4cbb17',secondary:'#000000'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f9fafb;
+        }
+        .login-container {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .password-toggle:hover {
+            cursor: pointer;
+        }
+        .dashboard {
+            display: none;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .table-container {
+            display: none;
+        }
+        .table-container.active {
+            display: block;
+        }
+        .tab-button.active {
+            background-color: #4cbb17;
+            color: white;
+        }
+        .custom-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4cbb17;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Login Section -->
+    <div class="login-container min-h-screen flex items-center justify-center bg-secondary p-4">
+        <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <h1 class="font-['Pacifico'] text-3xl text-secondary mb-2">logo</h1>
+                <p class="text-gray-600">Staff Login Portal</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div class="relative">
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Staff Username</label>
+                    <div class="relative flex items-center">
+                        <div class="absolute left-3 w-5 h-5 flex items-center justify-center text-gray-400">
+                            <i class="ri-user-line"></i>
+                        </div>
+                        <input type="text" id="username" name="username" class="pl-10 pr-3 py-2 w-full border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <div class="relative flex items-center">
+                        <div class="absolute left-3 w-5 h-5 flex items-center justify-center text-gray-400">
+                            <i class="ri-lock-line"></i>
+                        </div>
+                        <input type="password" id="password" name="password" class="pl-10 pr-10 py-2 w-full border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                        <div class="absolute right-3 w-5 h-5 flex items-center justify-center text-gray-400 password-toggle">
+                            <i class="ri-eye-line"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <label class="custom-switch">
+                            <input type="checkbox" id="remember">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    </div>
+                    <a href="#" class="text-sm text-primary hover:underline">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-button hover:bg-opacity-90 transition duration-200 whitespace-nowrap !rounded-button">Login</button>
+                
+                <div class="text-center text-sm text-gray-500 mt-4">
+                    <p>Secure login for authorized staff only</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+            <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="font-['Pacifico'] text-2xl text-secondary mr-8">logo</h1>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="text-gray-700 hover:text-primary font-medium">Dashboard</a>
+                        <a href="#" class="text-gray-700 hover:text-primary font-medium">Reports</a>
+                        <a href="#" class="text-gray-700 hover:text-primary font-medium">Settings</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 cursor-pointer">
+                            <i class="ri-notification-3-line"></i>
+                        </div>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-2">
+                            <i class="ri-user-line text-gray-600"></i>
+                        </div>
+                        <div class="hidden md:block">
+                            <p class="text-sm font-medium">Meshack Musembi</p>
+                            <p class="text-xs text-gray-500">Senior Manager</p>
+                        </div>
+                    </div>
+                    
+                    <button id="logoutBtn" class="text-gray-700 hover:text-red-500 whitespace-nowrap !rounded-button">
+                        <i class="ri-logout-box-r-line mr-1"></i>
+                        <span class="hidden md:inline">Logout</span>
+                    </button>
+                    
+                    <button class="md:hidden text-gray-700" id="mobileMenuBtn">
+                        <i class="ri-menu-line text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden">
+            <div class="bg-white h-full w-64 shadow-xl p-4 transform transition-transform duration-300 -translate-x-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="font-['Pacifico'] text-2xl text-secondary">logo</h1>
+                    <button id="closeMobileMenu" class="text-gray-500">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <a href="#" class="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded">Dashboard</a>
+                    <a href="#" class="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded">Reports</a>
+                    <a href="#" class="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded">Settings</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 pt-24 pb-12">
+            <!-- Dashboard Header -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Banking Management Dashboard</h2>
+                <p class="text-gray-600">Welcome back, Meshack. Last login: June 17, 2025 at 09:23 AM</p>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Total Customers</h3>
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                            <i class="ri-user-line text-primary"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">2,483</p>
+                    <p class="text-sm text-green-500 mt-2 flex items-center">
+                        <i class="ri-arrow-up-line mr-1"></i>
+                        <span>4.6% from last month</span>
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Active Accounts</h3>
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i class="ri-bank-card-line text-blue-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">2,195</p>
+                    <p class="text-sm text-green-500 mt-2 flex items-center">
+                        <i class="ri-arrow-up-line mr-1"></i>
+                        <span>2.3% from last month</span>
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Pending Approvals</h3>
+                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                            <i class="ri-time-line text-yellow-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">37</p>
+                    <p class="text-sm text-red-500 mt-2 flex items-center">
+                        <i class="ri-arrow-up-line mr-1"></i>
+                        <span>12.8% from last month</span>
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-gray-500 text-sm font-medium">Total Balance</h3>
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i class="ri-money-dollar-circle-line text-purple-500"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">$42.8M</p>
+                    <p class="text-sm text-green-500 mt-2 flex items-center">
+                        <i class="ri-arrow-up-line mr-1"></i>
+                        <span>8.2% from last month</span>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Search and Actions -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="ri-search-line text-gray-400"></i>
+                            </div>
+                            <input type="text" id="searchInput" placeholder="Search by Account Number" class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="searchBtn" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition duration-200 flex items-center whitespace-nowrap !rounded-button">
+                            <i class="ri-search-line mr-2"></i>
+                            Search
+                        </button>
+                        
+                        <button id="generateReportBtn" class="bg-secondary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition duration-200 flex items-center whitespace-nowrap !rounded-button">
+                            <i class="ri-file-chart-line mr-2"></i>
+                            Generate Report
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Search Results (Initially Hidden) -->
+                <div id="searchResults" class="mt-6 hidden">
+                    <h4 class="text-lg font-medium text-gray-800 mb-3">Search Results</h4>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-500">Customer ID</p>
+                                <p class="font-medium" id="resultCustomerId"</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Full Name</p>
+                                <p class="font-medium" id="resultName"</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Account Number</p>
+                                <p class="font-medium" id="resultName"</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Account Type</p>
+                                <p class="font-medium" id="resultAccountType</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Balance</p>
+                                <p class="font-medium text" id="resultBalance</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Status</p>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Date Opened</p>
+                                <p class="font-medium">March 12, 2023</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Last Transaction</p>
+                                <p class="font-medium">June 15, 2025</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 flex space-x-3">
+                            <button class="text-primary hover:text-opacity-80 text-sm font-medium flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-eye-line mr-1"></i>
+                                View Details
+                            </button>
+                            <button class="text-primary hover:text-opacity-80 text-sm font-medium flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-history-line mr-1"></i>
+                                Transaction History
+                            </button>
+                            <button class="text-primary hover:text-opacity-80 text-sm font-medium flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-edit-line mr-1"></i>
+                                Edit Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Table Navigation Tabs -->
+            <div class="mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="flex flex-wrap -mb-px">
+                        <button class="tab-button active mr-2 px-4 py-2 font-medium text-sm rounded-t-lg focus:outline-none whitespace-nowrap !rounded-button" data-target="activeCustomers">
+                            Active Customers
+                        </button>
+                        <button class="tab-button mr-2 px-4 py-2 font-medium text-sm rounded-t-lg focus:outline-none whitespace-nowrap !rounded-button" data-target="pendingCustomers">
+                            Pending Approvals
+                        </button>
+                        <button class="tab-button mr-2 px-4 py-2 font-medium text-sm rounded-t-lg focus:outline-none whitespace-nowrap !rounded-button" data-target="creditCustomer">
+                            Credit Customer
+                        </button>
+                        <button class="tab-button mr-2 px-4 py-2 font-medium text-sm rounded-t-lg focus:outline-none whitespace-nowrap !rounded-button" data-target="deleteCustomer">
+                            Delete Customer
+                        </button>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Table Containers -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Active Customers Table -->
+                <div id="activeCustomers" class="table-container active">
+                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-medium text-gray-800">Active Customers</h3>
+                        <div class="flex items-center">
+                            <div class="relative mr-3">
+                                <select class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 pl-3 pr-8 rounded-button leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                    <option>All Account Types</option>
+                                    <option>Savings Account</option>
+                                    <option>Checking Account</option>
+                                    <option>Fixed Deposit</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </div>
+                            <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-button text-sm flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-filter-3-line mr-1"></i>
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Customer ID
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Full Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Number
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Type
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Balance
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-78542
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Rebecca Thompson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-7731-9284-0012
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $24,853.42
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-65921
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Michael Anderson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-6547-1122-7865
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $12,478.19
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-32145
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Jennifer Williams
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-9988-3344-5566
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Fixed Deposit
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $50,000.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-98765
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        David Johnson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-1122-3344-5566
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $8,742.53
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-45678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Sarah Martinez
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-7890-1234-5678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $15,321.67
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="text-blue-600 hover:text-blue-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800 whitespace-nowrap !rounded-button">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">2,195</span> results
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap !rounded-button" disabled>
+                                Previous
+                            </button>
+                            <button class="px-3 py-1 bg-primary text-white rounded-button text-sm hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                1
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                2
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                3
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Customers Table -->
+                <div id="pendingCustomers" class="table-container">
+                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-medium text-gray-800">Pending Approvals</h3>
+                        <div class="flex items-center">
+                            <button class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition duration-200 flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-check-double-line mr-2"></i>
+                                Approve All
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Customer ID
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Full Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Number
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Registration Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Type
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-12345
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Emily Rodriguez
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-1234-5678-9012
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        June 15, 2025
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                                Approve
+                                            </button>
+                                            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-button text-xs hover:bg-gray-300 whitespace-nowrap !rounded-button">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-23456
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Robert Wilson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-2345-6789-0123
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        June 14, 2025
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                                Approve
+                                            </button>
+                                            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-button text-xs hover:bg-gray-300 whitespace-nowrap !rounded-button">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-34567
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Jessica Brown
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-3456-7890-1234
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        June 13, 2025
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Fixed Deposit
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                                Approve
+                                            </button>
+                                            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-button text-xs hover:bg-gray-300 whitespace-nowrap !rounded-button">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-45678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Thomas Davis
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-4567-8901-2345
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        June 12, 2025
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                                Approve
+                                            </button>
+                                            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-button text-xs hover:bg-gray-300 whitespace-nowrap !rounded-button">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-56789
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Amanda Miller
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-5678-9012-3456
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        June 11, 2025
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <div class="flex space-x-2">
+                                            <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                                Approve
+                                            </button>
+                                            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-button text-xs hover:bg-gray-300 whitespace-nowrap !rounded-button">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">37</span> results
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap !rounded-button" disabled>
+                                Previous
+                            </button>
+                            <button class="px-3 py-1 bg-primary text-white rounded-button text-sm hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                1
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                2
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Credit Customer Table -->
+                <div id="creditCustomer" class="table-container">
+                    <div class="p-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-800">Credit Customer</h3>
+                        <p class="text-sm text-gray-600 mt-1">Add funds to customer accounts</p>
+                    </div>
+                    
+                    <div class="p-4 bg-gray-50 border-b border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4">
+                            <div class="flex-1">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="ri-search-line text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="creditSearchInput" placeholder="Search by Account Number or Customer ID" class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                </div>
+                            </div>
+                            
+                            <button id="creditSearchBtn" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition duration-200 flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-search-line mr-2"></i>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Customer ID
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Full Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Number
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Type
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Current Balance
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Credit Amount
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-78542
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Rebecca Thompson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-7731-9284-0012
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $24,853.42
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500">$</span>
+                                            </div>
+                                            <input type="number" class="pl-8 pr-3 py-1 w-24 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                            Credit
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-65921
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Michael Anderson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-6547-1122-7865
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $12,478.19
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500">$</span>
+                                            </div>
+                                            <input type="number" class="pl-8 pr-3 py-1 w-24 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                            Credit
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-32145
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Jennifer Williams
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-9988-3344-5566
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Fixed Deposit
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $50,000.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500">$</span>
+                                            </div>
+                                            <input type="number" class="pl-8 pr-3 py-1 w-24 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                            Credit
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-98765
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        David Johnson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-1122-3344-5566
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $8,742.53
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500">$</span>
+                                            </div>
+                                            <input type="number" class="pl-8 pr-3 py-1 w-24 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                            Credit
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-45678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Sarah Martinez
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-7890-1234-5678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $15,321.67
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-gray-500">$</span>
+                                            </div>
+                                            <input type="number" class="pl-8 pr-3 py-1 w-24 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-primary text-white px-3 py-1 rounded-button text-xs hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                            Credit
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">2,195</span> results
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap !rounded-button" disabled>
+                                Previous
+                            </button>
+                            <button class="px-3 py-1 bg-primary text-white rounded-button text-sm hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                1
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                2
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                3
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delete Customer Table -->
+                <div id="deleteCustomer" class="table-container">
+                    <div class="p-4 border-b border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-800">Delete Customer</h3>
+                        <p class="text-sm text-gray-600 mt-1">Remove customer accounts from the system</p>
+                    </div>
+                    
+                    <div class="p-4 bg-gray-50 border-b border-gray-200">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4">
+                            <div class="flex-1">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="ri-search-line text-gray-400"></i>
+                                    </div>
+                                    <input type="text" id="deleteSearchInput" placeholder="Search by Account Number or Customer ID" class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                </div>
+                            </div>
+                            
+                            <button id="deleteSearchBtn" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-opacity-90 transition duration-200 flex items-center whitespace-nowrap !rounded-button">
+                                <i class="ri-search-line mr-2"></i>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Customer ID
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Full Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Number
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Account Type
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Balance
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Reason
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-78542
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Rebecca Thompson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-7731-9284-0012
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $24,853.42
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-1 pl-3 pr-8 rounded-button leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                            <option value="">Select reason</option>
+                                            <option value="customer_request">Customer Request</option>
+                                            <option value="fraud">Fraud Activity</option>
+                                            <option value="deceased">Deceased</option>
+                                            <option value="inactive">Long Inactivity</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-button text-xs hover:bg-red-600 whitespace-nowrap !rounded-button">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-65921
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Michael Anderson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-6547-1122-7865
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $12,478.19
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-1 pl-3 pr-8 rounded-button leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                            <option value="">Select reason</option>
+                                            <option value="customer_request">Customer Request</option>
+                                            <option value="fraud">Fraud Activity</option>
+                                            <option value="deceased">Deceased</option>
+                                            <option value="inactive">Long Inactivity</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-button text-xs hover:bg-red-600 whitespace-nowrap !rounded-button">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-32145
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Jennifer Williams
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-9988-3344-5566
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Fixed Deposit
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $50,000.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-1 pl-3 pr-8 rounded-button leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                            <option value="">Select reason</option>
+                                            <option value="customer_request">Customer Request</option>
+                                            <option value="fraud">Fraud Activity</option>
+                                            <option value="deceased">Deceased</option>
+                                            <option value="inactive">Long Inactivity</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-button text-xs hover:bg-red-600 whitespace-nowrap !rounded-button">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-98765
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        David Johnson
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-1122-3344-5566
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Savings Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $8,742.53
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-1 pl-3 pr-8 rounded-button leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                            <option value="">Select reason</option>
+                                            <option value="customer_request">Customer Request</option>
+                                            <option value="fraud">Fraud Activity</option>
+                                            <option value="deceased">Deceased</option>
+                                            <option value="inactive">Long Inactivity</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-button text-xs hover:bg-red-600 whitespace-nowrap !rounded-button">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        CUS-45678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Sarah Martinez
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        4582-7890-1234-5678
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        Checking Account
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+                                        $15,321.67
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <select class="appearance-none bg-white border border-gray-300 text-gray-700 py-1 pl-3 pr-8 rounded-button leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                                            <option value="">Select reason</option>
+                                            <option value="customer_request">Customer Request</option>
+                                            <option value="fraud">Fraud Activity</option>
+                                            <option value="deceased">Deceased</option>
+                                            <option value="inactive">Long Inactivity</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <button class="bg-red-500 text-white px-3 py-1 rounded-button text-xs hover:bg-red-600 whitespace-nowrap !rounded-button">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">2,195</span> results
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap !rounded-button" disabled>
+                                Previous
+                            </button>
+                            <button class="px-3 py-1 bg-primary text-white rounded-button text-sm hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                                1
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                2
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                3
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="bg-white border-t border-gray-200 mt-12">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-sm text-gray-600">&copy; 2025 Banking System. All rights reserved.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-sm text-gray-600 hover:text-primary">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-primary">Terms of Service</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-primary">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Confirm Delete</h3>
+                <p class="text-sm text-gray-600 mt-1">Are you sure you want to delete this customer account? This action cannot be undone.</p>
+            </div>
+            
+            <div class="mb-4">
+                <label for="deleteReason" class="block text-sm font-medium text-gray-700 mb-1">Reason for Deletion</label>
+                <textarea id="deleteReason" rows="3" class="w-full border border-gray-300 rounded-button px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"></textarea>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelDelete" class="px-4 py-2 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                    Cancel
+                </button>
+                <button id="confirmDelete" class="px-4 py-2 bg-red-500 text-white rounded-button text-sm hover:bg-red-600 whitespace-nowrap !rounded-button">
+                    Delete Account
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Credit Confirmation Modal -->
+    <div id="creditModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Confirm Credit</h3>
+                <p class="text-sm text-gray-600 mt-1">You are about to credit <span class="font-medium">$1,000.00</span> to account <span class="font-medium">4582-7731-9284-0012</span>.</p>
+            </div>
+            
+            <div class="mb-4">
+                <label for="creditNote" class="block text-sm font-medium text-gray-700 mb-1">Transaction Note (Optional)</label>
+                <textarea id="creditNote" rows="2" class="w-full border border-gray-300 rounded-button px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"></textarea>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelCredit" class="px-4 py-2 border border-gray-300 rounded-button text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap !rounded-button">
+                    Cancel
+                </button>
+                <button id="confirmCredit" class="px-4 py-2 bg-primary text-white rounded-button text-sm hover:bg-opacity-90 whitespace-nowrap !rounded-button">
+                    Confirm Credit
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 flex items-center z-50 transform translate-y-20 opacity-0 transition-all duration-300 hidden">
+        <div id="toastIcon" class="w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-green-100">
+            <i class="ri-check-line text-green-500"></i>
+        </div>
+        <div>
+            <h4 id="toastTitle" class="font-medium text-gray-900">Success</h4>
+            <p id="toastMessage" class="text-sm text-gray-600">Operation completed successfully.</p>
+        </div>
+        <button id="closeToast" class="ml-4 text-gray-400 hover:text-gray-600">
+            <i class="ri-close-line"></i>
+        </button>
+    </div>
+
+    <script id="loginScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const loginContainer = document.querySelector('.login-container');
+            const dashboard = document.querySelector('.dashboard');
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.querySelector('.password-toggle');
+            
+            // Password visibility toggle
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                const icon = this.querySelector('i');
+                if (type === 'text') {
+                    icon.classList.remove('ri-eye-line');
+                    icon.classList.add('ri-eye-off-line');
+                } else {
+                    icon.classList.remove('ri-eye-off-line');
+                    icon.classList.add('ri-eye-line');
+                }
+            });
+            
+            // Login form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Simple validation
+                if (!username || !password) {
+                    showToast('Error', 'Please enter both username and password.', 'error');
+                    return;
+                }
+                
+                // Simulate login (in a real app, this would be an API call)
+                setTimeout(function() {
+                    loginContainer.style.display = 'none';
+                    dashboard.style.display = 'block';
+                    showToast('Success', 'Login successful. Welcome back!', 'success');
+                }, 1000);
+            });
+        });
+    </script>
+    
+    <script id="dashboardScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileMenu = document.getElementById('closeMobileMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuContent = mobileMenu.querySelector('div');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenuContent.classList.remove('-translate-x-full');
+                }, 10);
+            });
+            
+            closeMobileMenu.addEventListener('click', function() {
+                mobileMenuContent.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            });
+            
+            // Tab navigation
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tableContainers = document.querySelectorAll('.table-container');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const target = this.dataset.target;
+                    
+                    // Deactivate all tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tableContainers.forEach(container => container.classList.remove('active'));
+                    
+                    // Activate selected tab
+                    this.classList.add('active');
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+            
+            // Search functionality
+            const searchBtn = document.getElementById('searchBtn');
+            const searchResults = document.getElementById('searchResults');
+            
+            searchBtn.addEventListener('click', function() {
+                const searchInput = document.getElementById('searchInput').value;
+                if (searchInput.trim()) {
+                    searchResults.classList.remove('hidden');
+                    showToast('Success', 'Customer found.', 'success');
+                } else {
+                    showToast('Error', 'Please enter an account number to search.', 'error');
+                }
+            });
+            
+            // Report generation
+            const generateReportBtn = document.getElementById('generateReportBtn');
+            
+            generateReportBtn.addEventListener('click', function() {
+                showToast('Success', 'Report generated successfully. Downloading...', 'success');
+            });
+            
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            const loginContainer = document.querySelector('.login-container');
+            const dashboard = document.querySelector('.dashboard');
+            
+            logoutBtn.addEventListener('click', function() {
+                dashboard.style.display = 'none';
+                loginContainer.style.display = 'flex';
+                showToast('Success', 'Logged out successfully.', 'success');
+            });
+        });
+    </script>
+    
+    <script id="modalScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Delete modal functionality
+            const deleteModal = document.getElementById('deleteModal');
+            const cancelDelete = document.getElementById('cancelDelete');
+            const confirmDelete = document.getElementById('confirmDelete');
+            
+            // Credit modal functionality
+            const creditModal = document.getElementById('creditModal');
+            const cancelCredit = document.getElementById('cancelCredit');
+            const confirmCredit = document.getElementById('confirmCredit');
+            
+            // Add event listeners to all delete buttons
+            document.querySelectorAll('button.bg-red-500').forEach(button => {
+                button.addEventListener('click', function() {
+                    deleteModal.classList.remove('hidden');
+                });
+            });
+            
+            // Add event listeners to all credit buttons
+            document.querySelectorAll('button.bg-primary:not(#searchBtn):not(#generateReportBtn):not(#creditSearchBtn):not(#deleteSearchBtn):not(#confirmCredit)').forEach(button => {
+                if (button.textContent.trim() === 'Credit') {
+                    button.addEventListener('click', function() {
+                        creditModal.classList.remove('hidden');
+                    });
+                }
+            });
+            
+            // Cancel delete
+            cancelDelete.addEventListener('click', function() {
+                deleteModal.classList.add('hidden');
+            });
+            
+            // Confirm delete
+            confirmDelete.addEventListener('click', function() {
+                deleteModal.classList.add('hidden');
+                showToast('Success', 'Customer account deleted successfully.', 'success');
+            });
+            
+            // Cancel credit
+            cancelCredit.addEventListener('click', function() {
+                creditModal.classList.add('hidden');
+            });
+            
+            // Confirm credit
+            confirmCredit.addEventListener('click', function() {
+                creditModal.classList.add('hidden');
+                showToast('Success', 'Account credited successfully.', 'success');
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === deleteModal) {
+                    deleteModal.classList.add('hidden');
+                }
+                if (e.target === creditModal) {
+                    creditModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    
+    <script id="toastScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            window.showToast = function(title, message, type) {
+                const toast = document.getElementById('toast');
+                const toastTitle = document.getElementById('toastTitle');
+                const toastMessage = document.getElementById('toastMessage');
+                const toastIcon = document.getElementById('toastIcon');
+                const closeToast = document.getElementById('closeToast');
+                
+                toastTitle.textContent = title;
+                toastMessage.textContent = message;
+                
+                // Set icon and color based on type
+                if (type === 'success') {
+                    toastIcon.className = 'w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-green-100';
+                    toastIcon.innerHTML = '<i class="ri-check-line text-green-500"></i>';
+                } else if (type === 'error') {
+                    toastIcon.className = 'w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-red-100';
+                    toastIcon.innerHTML = '<i class="ri-close-line text-red-500"></i>';
+                } else if (type === 'warning') {
+                    toastIcon.className = 'w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-yellow-100';
+                    toastIcon.innerHTML = '<i class="ri-alert-line text-yellow-500"></i>';
+                } else if (type === 'info') {
+                    toastIcon.className = 'w-8 h-8 rounded-full flex items-center justify-center mr-3 bg-blue-100';
+                    toastIcon.innerHTML = '<i class="ri-information-line text-blue-500"></i>';
+                }
+                
+                // Show toast
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-20', 'opacity-0');
+                }, 10);
+                
+                // Auto hide after 3 seconds
+                const toastTimeout = setTimeout(() => {
+                    hideToast();
+                }, 3000);
+                
+                // Close button
+                closeToast.addEventListener('click', function() {
+                    clearTimeout(toastTimeout);
+                    hideToast();
+                });
+                
+                function hideToast() {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 300);
+                }
+            };
+        });
+    </script>
+    <script>
+    // Mock dataset (you can replace this with a real API call or database later)
+    const customers = [
+        {
+            customerId: "CUS-78542",
+            name: "Rebecca Thompson",
+            accountNumber: "4582-7731-9284-0012",
+            accountType: "Savings Account",
+            balance: 24853.42,
+            status: "Active",
+            dateOpened: "March 12, 2023",
+            lastTransaction: "June 15, 2025"
+        },
+        {
+            customerId: "CUS-65921",
+            name: "Michael Anderson",
+            accountNumber: "4582-6547-1122-7865",
+            accountType: "Checking Account",
+            balance: 12478.19,
+            status: "Active",
+            dateOpened: "April 18, 2023",
+            lastTransaction: "June 10, 2025"
+        },
+        {
+            customerId: "CUS-32145",
+            name: "Jennifer Williams",
+            accountNumber: "4582-9988-3344-5566",
+            accountType: "Fixed Deposit",
+            balance: 50000.00,
+            status: "Active",
+            dateOpened: "May 01, 2023",
+            lastTransaction: "June 12, 2025"
+        },
+        {
+            customerId: "CUS-98765",
+            name: "David Johnson",
+            accountNumber: "4582-1122-3344-5566",
+            accountType: "Savings Account",
+            balance: 8742.53,
+            status: "Active",
+            dateOpened: "June 5, 2023",
+            lastTransaction: "June 16, 2025"
+        },
+        {
+            customerId: "CUS-45678",
+            name: "Sarah Martinez",
+            accountNumber: "4582-7890-1234-5678",
+            accountType: "Checking Account",
+            balance: 15321.67,
+            status: "Active",
+            dateOpened: "March 25, 2023",
+            lastTransaction: "June 15, 2025"
+        }
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resultsContainer = document.getElementById('searchResults');
+
+    // Display function
+    function displayCustomer(customer) {
+    document.getElementById('resultCustomerId').textContent = customer.customerId;
+    document.getElementById('resultName').textContent = customer.name;
+    document.getElementById('resultAccountNumber').textContent = customer.accountNumber;
+    document.getElementById('resultAccountType').textContent = customer.accountType;
+    document.getElementById('resultBalance').textContent = `$${customer.balance.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+    document.getElementById('resultStatus').textContent = customer.status;
+    document.getElementById('resultDateOpened').textContent = customer.dateOpened;
+    document.getElementById('resultLastTransaction').textContent = customer.lastTransaction;
+
+    document.getElementById('searchResults').classList.remove('hidden');
+} 
+    // Search Handler
+    searchBtn.addEventListener('click', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        if (!query) {
+            alert("Please enter a search term.");
+            return;
+        }
+
+        const found = customers.find(c =>
+            c.customerId.toLowerCase().includes(query) ||
+            c.name.toLowerCase().includes(query) ||
+            c.accountNumber.toLowerCase().includes(query) ||
+            c.accountType.toLowerCase().includes(query)
+        );
+
+        if (found) {
+            displayCustomer(found);
+        } else {
+            resultsContainer.classList.remove('hidden');
+            resultsContainer.innerHTML = `<p class="text-red-500 text-sm">No matching customer found.</p>`;
+        }
+    });
+</script>
+</body>
+</html>
